@@ -7,13 +7,9 @@ app.use(express.urlencoded({ extended: false}));
 app.use(express.json());
 
 // Routes
-app.get('/', (req, res) => {
-    res.json({
-      message: 'Hello World'
-    });
-  });
 
-// Default response for any other request(Not Found) Catch all
+
+// Default response for any other request(Not Found) Catch all -- 404
 app.use((req, res) => {
     res.status(404).end();
 });
