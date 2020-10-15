@@ -19,8 +19,6 @@ const db = new sqlite3.Database('./db/election.db', err => {
 
 // Routes
 
-// Delete a candidate
-
 // Create a candidate
 const sql = `INSERT INTO candidates (id, first_name, last_name, industry_connected) 
               VALUES (?,?,?,?)`;
@@ -50,12 +48,22 @@ app.get('/api/candidates', (req, res) => {
     });
 })
 
-// db.run(`DELETE FROM candidates WHERE id = ?`, 1, function(err, result) {
-//     if (err) {
-//       console.log(err);
-//     }
-//     console.log(result, this, this.changes);
-//   });
+// Delete a candidate
+app.delete('/api/candidate/:id', (req, res) => {
+    const sql = `DELETE FROM candidates WHERE id = ?`;
+    const params = [req.params.id];
+    db.run(sql, params, function(err, result) {
+      if (err) {
+        res.status(400).json({ error: res.message });
+        return;
+      }
+  
+      res.json({
+        message: 'successfully deleted',
+        changes: this.changes
+      });
+    });
+  });
 
 // Get single candidate
 app.get('/api/candidate/:id', (req, res) => {
