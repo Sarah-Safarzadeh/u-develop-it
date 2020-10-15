@@ -6,16 +6,21 @@ const sqlite3 = require('sqlite3').verbose();
 // MIDDLEWARE
 app.use(express.urlencoded({ extended: false}));
 app.use(express.json());
+
 // Connect to database
-const db = new sqlite3.Database('./db.election.db', err => {
+const db = new sqlite3.Database('./db/election.db', err => {
     if (err) {
-        return console.error(err.message);
+      return console.error(err.message);
     }
-    console.log('connected to the election database');
-});
+  
+    console.log('Connected to the election database.');
+  });
+
 
 // Routes
-
+db.all(`SELET * FROM candidates`, (err, rows) => {
+    console.log(rows);
+});
 
 // Default response for any other request(Not Found) Catch all -- 404
 app.use((req, res) => {
@@ -23,6 +28,9 @@ app.use((req, res) => {
 });
 
 // Initialize Express.js Server on 3001
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+// Start server after DB connection
+db.on('open', () => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  });
