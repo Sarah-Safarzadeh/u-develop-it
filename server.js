@@ -6,12 +6,17 @@ const app = express();
 app.use(express.urlencoded({ extended: false}));
 app.use(express.json());
 
-// GET route
+// Routes
 app.get('/', (req, res) => {
     res.json({
       message: 'Hello World'
     });
   });
+
+// Default response for any other request(Not Found) Catch all
+app.use((req, res) => {
+    res.status(404).end();
+});
 
 // Initialize Express.js Server on 3001
 app.listen(PORT, () => {
