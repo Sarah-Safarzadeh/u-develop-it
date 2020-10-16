@@ -2,22 +2,12 @@
 const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
-const sqlite3 = require('sqlite3').verbose();
 const inputCheck = require('./utils/inputCheck');
+const db = require('./db/database');
 
 // MIDDLEWARE
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
-// Connect to database
-const db = new sqlite3.Database('./db/election.db', err => {
-    if (err) {
-        return console.error(err.message);
-    }
-
-    console.log('Connected to the election database.');
-});
-
 
 // Routes
 
@@ -191,7 +181,6 @@ app.get('/api/candidate/:id', (req, res) => {
         });
     });
 });
-
 
 // Default response for any other request(Not Found) Catch all -- 404. keep as last/bottom route.
 app.use((req, res) => {
