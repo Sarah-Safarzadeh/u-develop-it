@@ -1,39 +1,27 @@
 // Dependencies
 const express = require('express');
+const db = require('./db/database');
+
 const PORT = process.env.PORT || 3001;
 const app = express();
-const inputCheck = require('./utils/inputCheck');
-const db = require('./db/database');
+
 const apiRoutes = require('./routes/apiRoutes');
 
-// MIDDLEWARE
+// Express middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+// Use apiRoutes
 app.use('/api', apiRoutes);
 
-// Routes
-
-// Create a candidate
-const sql = `INSERT INTO candidates (id, first_name, last_name, industry_connected) 
-              VALUES (?,?,?,?)`;
-const params = [1, 'Ronald', 'Firbank', 1];
-// ES5 function, not arrow function, to use this
-db.run(sql, params, function (err, result) {
-    if (err) {
-        console.log(err);
-    }
-    console.log(result, this.lastID);
-});
-
-// Default response for any other request(Not Found) Catch all -- 404. keep as last/bottom route.
+// Default response for any other request (Not Found)
 app.use((req, res) => {
-    res.status(404).end();
+  res.status(404).end();
 });
 
-// Initialize Express.js Server on 3001
 // Start server after DB connection
 db.on('open', () => {
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 });
