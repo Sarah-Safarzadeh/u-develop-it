@@ -47,7 +47,7 @@ router.get('/voter/:id', (req, res) => {
       res.status(400).json({ error: errors });
       return;
     }
-    
+
     const sql = `INSERT INTO voters (first_name, last_name, email) VALUES (?,?,?)`;
     const params = [body.first_name, body.last_name, body.email];
   
@@ -61,6 +61,35 @@ router.get('/voter/:id', (req, res) => {
         message: 'success',
         data: body,
         id: this.lastID
+      });
+    });
+  });
+
+  // PUT ROUTE 
+  // To update email address
+  router.put('/voter/:id', (req, res) => {
+    // Data validation
+    const errors = inputCheck(req.body, 'email');
+    if (errors) {
+      res.status(400).json({ error: errors });
+      return;
+    }
+  
+    // Prepare statement
+    const sql = `UPDATE voters SET email = ? WHERE id = ?`;
+    const params = [req.body.email, req.params.id];
+  
+    // Execute
+    db.run(sql, params, function(err, data) {
+      if (err) {
+        res.status(400).json({ error: err.message });
+        return;
+      }
+  
+      res.json({
+        message: 'success',
+        data: req.body,
+        changes: this.changes
       });
     });
   });
