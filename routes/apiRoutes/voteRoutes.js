@@ -30,3 +30,5 @@ router.post('/vote', ({body}, res) => {
       });
     });
   });
+
+  module.exports = router;
