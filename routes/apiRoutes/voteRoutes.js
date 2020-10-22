@@ -32,6 +32,7 @@ router.post('/vote', ({body}, res) => {
   });
 
 // GET Route
+// This is written wrong***
 router.get('/votes', (req, res) => {
     const sql = "GROUP BY candidate_id ORDER BY count DESC";
     const params = [];
