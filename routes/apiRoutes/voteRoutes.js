@@ -31,4 +31,16 @@ router.post('/vote', ({body}, res) => {
     });
   });
 
+// GET Route
+router.get('/votes', (req, res) => {
+    const sql = "GROUP BY candidate_id ORDER BY count DESC";
+    const params = [];
+
+    db.all(sql, params, (err, row) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+    }})
+});
+
   module.exports = router;
